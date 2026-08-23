@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Практики покоя</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ═════════════════  ТОКЕНЫ  ═════════════════ */
+:root{
+  --paper:#F7F3ED; --surface:#FFFDFA; --surface-2:#F0EAE1; --surface-3:#E8E0D4;
+  --ink:#191F29; --ink-2:#4B5464; --ink-3:#8B909C;
+  --rule:rgba(25,31,41,.13); --rule-soft:rgba(25,31,41,.06);
+  --dawn:#C25E33; --dawn-2:#E4A26A; --dawn-soft:rgba(194,94,51,.10);
+  --dusk:#2E4B69; --dusk-2:#5C82A8; --dusk-soft:rgba(46,75,105,.09);
+  --glow:rgba(194,94,51,.30);
+  --shadow:0 1px 2px rgba(25,31,41,.04), 0 14px 34px -20px rgba(25,31,41,.30);
+  --shadow-lift:0 2px 6px rgba(25,31,41,.06), 0 34px 70px -28px rgba(25,31,41,.40);
+  --serif:"Newsreader",Georgia,serif;
+  --display:"Fraunces",Georgia,serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  --rail:270px; --ease:cubic-bezier(.22,1,.36,1);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0F1319; --surface:#161B23; --surface-2:#1D232D; --surface-3:#252C38;
+    --ink:#EAE5DB; --ink-2:#A6AEBB; --ink-3:#727A88;
+    --rule:rgba(234,229,219,.15); --rule-soft:rgba(234,229,219,.07);
+    --dawn:#E38F5E; --dawn-2:#F0B889; --dawn-soft:rgba(227,143,94,.14);
+    --dusk:#7FA8CE; --dusk-2:#A5C4E0; --dusk-soft:rgba(127,168,206,.13);
+    --glow:rgba(227,143,94,.35);
+    --shadow:0 1px 2px rgba(0,0,0,.35), 0 14px 34px -20px rgba(0,0,0,.75);
+    --shadow-lift:0 2px 6px rgba(0,0,0,.4), 0 34px 70px -28px rgba(0,0,0,.85);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0F1319; --surface:#161B23; --surface-2:#1D232D; --surface-3:#252C38;
+  --ink:#EAE5DB; --ink-2:#A6AEBB; --ink-3:#727A88;
+  --rule:rgba(234,229,219,.15); --rule-soft:rgba(234,229,219,.07);
+  --dawn:#E38F5E; --dawn-2:#F0B889; --dawn-soft:rgba(227,143,94,.14);
+  --dusk:#7FA8CE; --dusk-2:#A5C4E0; --dusk-soft:rgba(127,168,206,.13);
+  --glow:rgba(227,143,94,.35);
+  --shadow:0 1px 2px rgba(0,0,0,.35), 0 14px 34px -20px rgba(0,0,0,.75);
+  --shadow-lift:0 2px 6px rgba(0,0,0,.4), 0 34px 70px -28px rgba(0,0,0,.85);
+}
+
+/* ═════════════════  БАЗА  ═════════════════ */
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--serif);font-size:18.5px;line-height:1.66;
+  font-optical-sizing:auto;-webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  transition:background .5s var(--ease),color .5s var(--ease);
+}
+p{margin:0 0 1.1em}
+a{color:inherit}
+h1,h2,h3,h4{margin:0;font-weight:400;line-height:1.14;letter-spacing:-.018em}
+::selection{background:var(--dawn-soft);color:var(--ink)}
+.mono{font-family:var(--mono);font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;font-weight:500}
+button{font-family:inherit}
+
+/* зерно */
+.grain{
+  position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.032;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* появление */
+[data-rv]{opacity:0;transform:translateY(22px);
+  transition:opacity .85s var(--ease),transform .85s var(--ease);transition-delay:var(--d,0ms)}
+[data-rv].in{opacity:1;transform:none}
+[data-rv="scale"]{transform:scale(.94)}
+[data-rv="scale"].in{transform:none}
+[data-rv="left"]{transform:translateX(-24px)}
+[data-rv="left"].in{transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition-duration:.001ms!important}
+  [data-rv]{opacity:1!important;transform:none!important}
+}
+
+/* ═════════════════  ШАПКА-ПРОГРЕСС  ═════════════════ */
+#readbar{position:fixed;top:0;left:0;height:2px;width:0;z-index:95;
+  background:linear-gradient(90deg,var(--dawn-2),var(--dawn),var(--dusk));
+  box-shadow:0 0 12px var(--glow);transition:width .1s linear}
+
+/* ═════════════════  ХИРО  ═════════════════ */
+.hero{position:relative;min-height:88vh;display:flex;align-items:center;
+  padding:5rem clamp(1.25rem,5vw,4rem) 4rem;border-bottom:1px solid var(--rule);overflow:hidden}
+.aurora{position:absolute;inset:-25%;z-index:0;filter:blur(70px);opacity:.62;pointer-events:none}
+.aurora i{position:absolute;border-radius:50%;display:block}
+.aurora i:nth-child(1){width:46vw;height:46vw;left:52%;top:-8%;background:var(--dawn-2);animation:d1 19s ease-in-out infinite alternate}
+.aurora i:nth-child(2){width:40vw;height:40vw;left:-6%;top:38%;background:var(--dusk-2);animation:d2 23s ease-in-out infinite alternate}
+.aurora i:nth-child(3){width:32vw;height:32vw;left:28%;top:62%;background:var(--dawn);opacity:.7;animation:d3 27s ease-in-out infinite alternate}
+@keyframes d1{to{transform:translate(-9vw,12vh) scale(1.16)}}
+@keyframes d2{to{transform:translate(11vw,-9vh) scale(1.2)}}
+@keyframes d3{to{transform:translate(-7vw,-13vh) scale(.86)}}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(to bottom,transparent 55%,var(--paper))}
+.hero-inner{position:relative;z-index:2;max-width:1180px;margin:0 auto;width:100%}
+
+.dawnbar{height:3px;width:0;border-radius:2px;margin-bottom:2.3rem;
+  background:linear-gradient(90deg,#EFB07A,#C25E33 24%,#7A6B78 54%,#3E5D7E 78%,#2E4B69);
+  animation:grow 1.5s var(--ease) .15s forwards}
+@keyframes grow{to{width:min(100%,540px)}}
+.hero .kicker{color:var(--dawn);margin-bottom:1.4rem;display:block;opacity:0;animation:fadeUp .9s var(--ease) .5s forwards}
+.hero h1{font-family:var(--display);font-size:clamp(2.9rem,8.6vw,6.6rem);font-weight:400;
+  font-variation-settings:"SOFT" 24,"WONK" 1;letter-spacing:-.035em;max-width:15ch}
+.hero h1 span{display:inline-block;opacity:0;transform:translateY(.42em) rotate(1.5deg);
+  animation:word 1.15s var(--ease) forwards}
+.hero h1 span:nth-child(1){animation-delay:.55s}
+.hero h1 span:nth-child(2){animation-delay:.68s}
+.hero h1 span:nth-child(3){animation-delay:.81s}
+.hero h1 .em{font-style:italic;color:var(--dawn)}
+@keyframes word{to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.hero .lede{margin-top:1.9rem;max-width:54ch;font-size:clamp(1.06rem,1.7vw,1.3rem);
+  color:var(--ink-2);line-height:1.6;opacity:0;animation:fadeUp 1s var(--ease) 1.05s forwards}
+.hero-meta{margin-top:3rem;display:flex;flex-wrap:wrap;gap:.7rem 2.4rem;color:var(--ink-3);
+  opacity:0;animation:fadeUp 1s var(--ease) 1.3s forwards}
+.hero-meta span{font-family:var(--mono);font-size:.73rem;letter-spacing:.1em}
+.hero-meta b{color:var(--ink-2);font-weight:500}
+.scrollcue{position:absolute;left:50%;bottom:2rem;z-index:2;transform:translateX(-50%);
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-3);
+  opacity:0;animation:fadeUp 1s var(--ease) 1.7s forwards;text-align:center}
+.scrollcue i{display:block;width:1px;height:34px;margin:.7rem auto 0;background:linear-gradient(var(--ink-3),transparent);
+  animation:cue 2.2s ease-in-out infinite}
+@keyframes cue{0%,100%{transform:scaleY(.4);opacity:.4}50%{transform:scaleY(1);opacity:1}}
+
+/* ═════════════════  КАРКАС  ═════════════════ */
+.shell{max-width:1180px;margin:0 auto;padding:0 clamp(1.25rem,5vw,4rem);position:relative;z-index:2}
+@media (min-width:1040px){
+  .shell{display:grid;grid-template-columns:var(--rail) minmax(0,1fr);gap:clamp(2.5rem,5vw,5rem);align-items:start}
+}
+.rail{padding:2.6rem 0 4rem}
+@media (min-width:1040px){
+  .rail{position:sticky;top:0;max-height:100vh;overflow-y:auto;overscroll-behavior:contain;
+    scrollbar-width:thin;scrollbar-color:var(--rule) transparent;padding-right:.5rem}
+  .rail::-webkit-scrollbar{width:4px}
+  .rail::-webkit-scrollbar-thumb{background:var(--rule);border-radius:3px}
+}
+.rail-title{color:var(--ink-3);margin-bottom:1.1rem;display:block}
+.toc{list-style:none;margin:0;padding:0;border-left:1px solid var(--rule)}
+.toc a{display:flex;gap:.7rem;align-items:baseline;padding:.44rem 0 .44rem 1rem;margin-left:-1px;
+  border-left:1px solid transparent;text-decoration:none;color:var(--ink-2);
+  font-size:.95rem;line-height:1.35;transition:color .25s,border-color .25s,padding-left .25s}
+.toc a:hover{color:var(--ink);padding-left:1.3rem}
+.toc a .n{font-family:var(--mono);font-size:.65rem;color:var(--ink-3);flex:none;width:1.6em}
+.toc a.on{color:var(--dawn);border-left-color:var(--dawn)}
+.toc a.on .n{color:var(--dawn)}
+.toc .sub a{padding-left:2.1rem;font-size:.88rem}
+.toc .sub a:hover{padding-left:2.4rem}
+.rail-tools{margin-top:1.8rem;display:flex;gap:.5rem;flex-wrap:wrap}
+.tbtn{font-family:var(--mono);font-size:.67rem;letter-spacing:.11em;text-transform:uppercase;
+  padding:.52rem .85rem;border:1px solid var(--rule);border-radius:999px;
+  background:transparent;color:var(--ink-2);cursor:pointer;transition:.25s var(--ease)}
+.tbtn:hover{border-color:var(--dawn);color:var(--dawn);transform:translateY(-1px)}
+.mobile-toc{position:sticky;top:0;z-index:60;background:color-mix(in srgb,var(--paper) 88%,transparent);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--rule);padding:.7rem clamp(1.25rem,5vw,4rem);display:flex;gap:.6rem;align-items:center}
+@media (min-width:1040px){.mobile-toc{display:none}}
+.mobile-toc .now{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;color:var(--ink-3);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:1039px){.rail{display:none;padding-top:1.4rem}.rail.open{display:block}}
+
+/* ═════════════════  КОНТЕНТ  ═════════════════ */
+main{padding:3.6rem 0 8rem;max-width:71ch}
+section{scroll-margin-top:90px;margin-bottom:clamp(3.6rem,8vw,6.4rem);position:relative}
+.sec-head{margin-bottom:2rem;position:relative}
+.sec-head::before{content:attr(data-ghost);position:absolute;right:-.2em;top:-.55em;
+  font-family:var(--display);font-size:8rem;font-weight:600;line-height:1;
+  color:var(--ink);opacity:.045;pointer-events:none;letter-spacing:-.05em;z-index:0}
+.sec-num{color:var(--ink-3);display:block;margin-bottom:.75rem;position:relative}
+.sec-head h2{font-family:var(--display);font-size:clamp(1.85rem,3.9vw,2.7rem);
+  font-variation-settings:"SOFT" 16;letter-spacing:-.028em;position:relative}
+h3{font-family:var(--display);font-size:1.3rem;font-weight:500;margin:2.2rem 0 .8rem}
+h4{font-size:1.02rem;font-weight:600;margin:1.7rem 0 .5rem;font-family:var(--serif)}
+.lead{font-size:1.16rem;color:var(--ink-2);line-height:1.62}
+.note{color:var(--ink-2);font-size:.95rem}
+strong{font-weight:600}
+ul.plain{margin:0 0 1.2em;padding-left:1.15em}
+ul.plain li{margin-bottom:.45em}
+ul.plain li::marker{color:var(--dawn)}
+
+.pull{margin:1.9rem 0;padding:1.25rem 0 1.25rem 1.6rem;position:relative;
+  font-family:var(--display);font-size:1.28rem;line-height:1.45;
+  font-variation-settings:"SOFT" 32,"WONK" 1;letter-spacing:-.018em}
+.pull::before{content:"";position:absolute;left:0;top:0;width:2px;height:100%;
+  background:linear-gradient(var(--dawn),var(--dusk));border-radius:2px;
+  transform:scaleY(0);transform-origin:top;transition:transform .9s var(--ease) .15s}
+.pull.in::before,[data-rv].in .pull::before{transform:scaleY(1)}
+.pull small{display:block;margin-top:.75rem;font-family:var(--mono);font-size:.65rem;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.warn{margin:1.7rem 0;padding:1.1rem 1.3rem;border-radius:12px;background:var(--dawn-soft);
+  border:1px solid rgba(194,94,51,.24);font-size:.97rem;line-height:1.55}
+.warn b{color:var(--dawn)}
+.aside{margin:1.6rem 0;padding:1.05rem 1.25rem;border-radius:12px;background:var(--surface-2);
+  font-size:.93rem;color:var(--ink-2);line-height:1.55}
+.aside.i{font-style:italic}
+
+/* ── матрица каналов ── */
+.matrix{display:grid;gap:.9rem;margin:1.8rem 0 1rem}
+@media (min-width:640px){.matrix{grid-template-columns:1fr 1fr}}
+.mx{background:var(--surface);border:1px solid var(--rule);border-radius:14px;
+  padding:1.2rem 1.3rem;box-shadow:var(--shadow);position:relative;overflow:hidden;
+  cursor:pointer;transition:transform .35s var(--ease),box-shadow .35s var(--ease),background .5s}
+.mx::after{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;transition:.4s}
+.mx[data-side="out"]::after{background:var(--dawn)}
+.mx[data-side="in"]::after{background:var(--dusk)}
+.mx:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift)}
+.mx .tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3)}
+.mx .name{font-family:var(--display);font-size:1.24rem;margin:.35rem 0 .55rem;font-variation-settings:"SOFT" 22}
+.mx .calm{font-size:.94rem;color:var(--ink-2);line-height:1.5;min-height:3em}
+.sig{display:flex;align-items:flex-end;gap:3px;height:26px;margin-top:.9rem}
+.sig b{flex:1;background:var(--ink-3);border-radius:2px;height:20%;transform-origin:bottom;
+  transition:height .6s var(--ease),background .5s}
+.mx.active .sig b{animation:bars 1.1s ease-in-out infinite alternate;background:var(--dawn)}
+.mx.active[data-side="in"] .sig b{background:var(--dusk)}
+.mx.active .sig b:nth-child(1){animation-delay:0s}
+.mx.active .sig b:nth-child(2){animation-delay:.13s}
+.mx.active .sig b:nth-child(3){animation-delay:.26s}
+.mx.active .sig b:nth-child(4){animation-delay:.39s}
+.mx.active .sig b:nth-child(5){animation-delay:.52s}
+.mx.active .sig b:nth-child(6){animation-delay:.65s}
+.mx.active .sig b:nth-child(7){animation-delay:.78s}
+@keyframes bars{from{height:15%}to{height:100%}}
+.mx .state{position:absolute;top:1.15rem;right:1.2rem;font-family:var(--mono);font-size:.58rem;
+  letter-spacing:.14em;text-transform:uppercase;padding:.24rem .55rem;border-radius:999px;
+  border:1px solid var(--rule);color:var(--ink-3);transition:.4s}
+.mx:not(.active) .state{background:var(--dusk-soft);color:var(--dusk);border-color:transparent}
+.mx:not(.active){background:var(--surface-2)}
+
+/* ── навыки ── */
+.skills{display:grid;gap:1.1rem;margin:1.7rem 0}
+@media (min-width:720px){.skills{grid-template-columns:repeat(3,1fr)}}
+.sk{border-top:2px solid var(--ink);padding-top:1rem;position:relative}
+.sk::before{content:"";position:absolute;top:-2px;left:0;height:2px;width:0;background:var(--dawn);
+  transition:width 1s var(--ease) var(--d,0ms)}
+.sk.in::before{width:100%}
+.sk .k{font-family:var(--mono);font-size:.6rem;letter-spacing:.15em;color:var(--ink-3);text-transform:uppercase}
+.sk h4{margin:.45rem 0 .4rem;font-family:var(--display);font-size:1.16rem;font-weight:500}
+.sk p{font-size:.93rem;color:var(--ink-2);margin:0;line-height:1.5}
+
+/* ── матрёшка ── */
+.nest{position:relative;height:190px;margin:2rem 0 1.2rem;display:grid;place-items:center}
+.nest .ring{position:absolute;border:1px solid var(--rule);border-radius:50%;
+  display:grid;place-items:flex-end;opacity:0;transform:scale(.5);
+  transition:opacity .8s var(--ease) var(--d),transform .8s var(--ease) var(--d)}
+.nest.in .ring{opacity:1;transform:none}
+.nest .ring:nth-child(1){width:186px;height:186px;--d:0ms;border-color:var(--dawn)}
+.nest .ring:nth-child(2){width:142px;height:142px;--d:180ms}
+.nest .ring:nth-child(3){width:98px;height:98px;--d:360ms}
+.nest .ring:nth-child(4){width:54px;height:54px;--d:540ms;background:var(--dusk-soft);border-color:var(--dusk)}
+.nest .lbl{position:absolute;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;
+  color:var(--ink-2);white-space:nowrap;opacity:0;transition:opacity .8s var(--ease) var(--d)}
+.nest.in .lbl{opacity:1}
+.nest .lbl:nth-of-type(1){--d:120ms}
+.nest .lbl:nth-of-type(2){--d:300ms}
+.nest .lbl:nth-of-type(3){--d:480ms}
+.nest .lbl:nth-of-type(4){--d:660ms}
+
+/* ── два вида покоя ── */
+.duo{display:grid;gap:1.1rem;margin:1.7rem 0}
+@media (min-width:700px){.duo{grid-template-columns:1fr 1fr}}
+.duo>div{padding:1.4rem 1.5rem;border-radius:14px;border:1px solid var(--rule);background:var(--surface);
+  box-shadow:var(--shadow);transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+.duo>div:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift)}
+.duo .h{font-family:var(--display);font-size:1.24rem;margin-bottom:.55rem}
+.duo .rel .h{color:var(--dawn)} .duo .abs .h{color:var(--dusk)}
+.duo p{font-size:.95rem;color:var(--ink-2);margin:0 0 .7rem}
+.duo p:last-child{margin:0}
+
+/* ── причины ── */
+.reasons{counter-reset:r;list-style:none;padding:0;margin:1.5rem 0}
+.reasons li{counter-increment:r;position:relative;padding:1.1rem 0 1.1rem 3.4rem;
+  border-bottom:1px solid var(--rule-soft);transition:padding-left .35s var(--ease)}
+.reasons li:first-child{border-top:1px solid var(--rule-soft)}
+.reasons li:hover{padding-left:3.8rem}
+.reasons li::before{content:counter(r,decimal-leading-zero);position:absolute;left:0;top:1.2rem;
+  font-family:var(--mono);font-size:.72rem;color:var(--dawn)}
+.reasons b{display:block;font-weight:600;margin-bottom:.18rem}
+.reasons span{color:var(--ink-2);font-size:.96rem;line-height:1.55}
+
+/* ═════════════════  ПРОТОКОЛЫ  ═════════════════ */
+.proto{background:var(--surface);border:1px solid var(--rule);border-radius:20px;
+  padding:clamp(1.35rem,3vw,2.2rem);margin:1.5rem 0 2.4rem;box-shadow:var(--shadow);
+  scroll-margin-top:90px;position:relative;overflow:hidden;
+  transition:box-shadow .5s var(--ease),transform .5s var(--ease)}
+.proto::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--dawn),var(--dawn-2),transparent);
+  transform:scaleX(0);transform-origin:left;transition:transform 1.1s var(--ease) .1s}
+.proto[data-kind="abs"]::before{background:linear-gradient(90deg,var(--dusk),var(--dusk-2),transparent)}
+.proto.in::before{transform:scaleX(1)}
+.proto:hover{box-shadow:var(--shadow-lift)}
+.proto-head{display:flex;gap:1.15rem;align-items:flex-start;margin-bottom:1.1rem}
+.proto-num{flex:none;width:3rem;height:3rem;border-radius:50%;display:grid;place-items:center;
+  border:1px solid var(--rule);font-family:var(--mono);font-size:.92rem;font-weight:700;
+  color:var(--dawn);background:var(--dawn-soft);transition:.5s var(--ease)}
+.proto[data-kind="abs"] .proto-num{color:var(--dusk);background:var(--dusk-soft)}
+.proto:hover .proto-num{transform:rotate(-8deg) scale(1.06)}
+.proto-head h3{margin:.28rem 0 .2rem;font-size:1.46rem;font-weight:500}
+.proto-head .sub{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-3)}
+
+ol.steps{counter-reset:s;list-style:none;margin:1.2rem 0;padding:0}
+ol.steps>li{counter-increment:s;position:relative;padding:0 0 .95rem 2.5rem}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:.1rem;
+  width:1.6rem;height:1.6rem;border-radius:50%;display:grid;place-items:center;
+  font-family:var(--mono);font-size:.68rem;font-weight:500;color:var(--ink-2);
+  background:var(--surface-2);border:1px solid var(--rule-soft);transition:.3s}
+ol.steps>li:hover::before{background:var(--dawn);color:#fff;border-color:var(--dawn)}
+ol.steps>li:last-child{padding-bottom:0}
+ol.steps ul{margin:.5rem 0 0;padding-left:1.15em;font-size:.94rem;color:var(--ink-2);list-style:disc}
+ol.steps ul li{padding:0 0 .3em;position:static}
+ol.steps ul li::marker{color:var(--dawn)}
+
+.zones{display:flex;flex-wrap:wrap;gap:.45rem;margin:.95rem 0 1.3rem}
+.zones span{font-size:.85rem;padding:.42rem .78rem;border-radius:999px;border:1px solid var(--rule);
+  background:var(--surface-2);color:var(--ink-2);cursor:default;transition:.3s var(--ease)}
+.zones span:hover{background:var(--dawn);color:#fff;border-color:var(--dawn);transform:translateY(-2px)}
+
+.chain{font-family:var(--mono);font-size:.79rem;color:var(--ink-2);background:var(--surface-2);
+  border:1px solid var(--rule-soft);border-radius:12px;padding:.95rem 1.05rem;margin:1rem 0 1.2rem;line-height:2}
+.chain b{color:var(--dawn);font-weight:500}
+.chain i{color:var(--ink-3);font-style:normal;padding:0 .28rem}
+
+/* ═════════════════  ТРЕНАЖЁРЫ  ═════════════════ */
+.lab{margin:1.8rem 0 .4rem;border:1px solid var(--rule);border-radius:16px;
+  background:linear-gradient(165deg,var(--surface-2),var(--surface));padding:1.35rem 1.4rem;position:relative;overflow:hidden}
+.lab-h{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:1.2rem}
+.lab-h .t{font-family:var(--display);font-size:1.14rem;font-weight:500}
+.lab-h .st{font-family:var(--mono);font-size:.63rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.lab .hint{margin-top:1rem;font-size:.86rem;color:var(--ink-3);line-height:1.5}
+.row{display:flex;flex-wrap:wrap;gap:.9rem;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:999px;overflow:hidden;background:var(--surface)}
+.seg button{font-family:var(--mono);font-size:.69rem;letter-spacing:.06em;padding:.52rem .85rem;
+  border:0;background:transparent;color:var(--ink-2);cursor:pointer;transition:.25s var(--ease)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.go{font-family:var(--mono);font-size:.71rem;letter-spacing:.13em;text-transform:uppercase;
+  padding:.64rem 1.4rem;border-radius:999px;border:1px solid var(--dawn);
+  background:var(--dawn);color:#fff;cursor:pointer;transition:.28s var(--ease);
+  box-shadow:0 6px 18px -8px var(--glow)}
+.go:hover{transform:translateY(-2px);box-shadow:0 12px 26px -10px var(--glow)}
+.go[data-on="1"]{background:transparent;color:var(--dawn)}
+.clock{font-family:var(--mono);font-size:1.55rem;font-variant-numeric:tabular-nums;margin-left:auto;color:var(--ink)}
+
+/* пульс-кольцо ноутинга */
+.pulsering{position:relative;width:130px;height:130px;margin:1.4rem auto .4rem;display:grid;place-items:center}
+.pulsering svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.pulsering circle{fill:none;stroke-width:2}
+.pulsering .bgc{stroke:var(--rule)}
+.pulsering .fgc{stroke:var(--dawn);stroke-linecap:round;transition:stroke-dashoffset .95s linear}
+.pulsering .core{width:54px;height:54px;border-radius:50%;background:var(--dawn-soft);
+  border:1px solid var(--dawn);transition:transform .5s var(--ease),opacity .5s}
+.pulsering.ping .core{animation:ping .9s var(--ease)}
+@keyframes ping{0%{transform:scale(1);box-shadow:0 0 0 0 var(--glow)}60%{transform:scale(1.22)}100%{transform:scale(1);box-shadow:0 0 0 26px transparent}}
+
+/* радар тишины */
+.radar{position:relative;width:min(300px,86vw);height:min(300px,86vw);margin:1.2rem auto 1rem}
+.radar .plate{position:absolute;inset:0;border-radius:50%;border:1px solid var(--rule);
+  background:radial-gradient(circle,var(--surface) 30%,var(--surface-2))}
+.radar .plate::before,.radar .plate::after{content:"";position:absolute;inset:14%;border-radius:50%;border:1px solid var(--rule-soft)}
+.radar .plate::after{inset:30%}
+.radar .sweep{position:absolute;inset:0;border-radius:50%;overflow:hidden}
+.radar .sweep i{position:absolute;left:50%;top:50%;width:50%;height:50%;transform-origin:0 0;
+  background:conic-gradient(from 0deg,var(--dusk-soft),transparent 55%);animation:spin 7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.radar button{position:absolute;transform:translate(-50%,-50%);
+  font-family:var(--mono);font-size:.63rem;letter-spacing:.07em;text-transform:uppercase;
+  padding:.5rem .7rem;border-radius:999px;border:1px solid var(--rule);background:var(--surface);
+  color:var(--ink-2);cursor:pointer;transition:.3s var(--ease);white-space:nowrap;z-index:2}
+.radar button:hover{border-color:var(--dusk);color:var(--dusk)}
+.radar button[aria-pressed="true"]{background:var(--dusk);color:#fff;border-color:var(--dusk);
+  box-shadow:0 0 0 6px var(--dusk-soft);transform:translate(-50%,-50%) scale(1.06)}
+.vert{display:flex;gap:.5rem;align-items:center;justify-content:center;flex-wrap:wrap;margin:.2rem 0 .4rem}
+.vert .vlbl{font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin-right:.4rem}
+.vert button{font-family:var(--mono);font-size:.63rem;letter-spacing:.07em;text-transform:uppercase;
+  padding:.5rem .9rem;border-radius:999px;border:1px solid var(--rule);background:var(--surface);
+  color:var(--ink-2);cursor:pointer;transition:.3s var(--ease)}
+.vert button:hover{border-color:var(--dusk);color:var(--dusk)}
+.vert button[aria-pressed="true"]{background:var(--dusk);color:#fff;border-color:var(--dusk);box-shadow:0 0 0 5px var(--dusk-soft)}
+.radar .center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;z-index:2;
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.09em;color:var(--ink-3);pointer-events:none}
+.radar .center b{display:block;font-family:var(--display);font-size:2rem;color:var(--ink);letter-spacing:-.02em}
+
+/* трекер мысль/тихо */
+.tracker .btns{display:flex;gap:.7rem;flex-wrap:wrap}
+.bigbtn{flex:1;min-width:130px;padding:1rem 1.1rem;border-radius:14px;border:1px solid var(--rule);
+  background:var(--surface);cursor:pointer;transition:.25s var(--ease);text-align:left}
+.bigbtn:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.bigbtn .bt{font-family:var(--display);font-size:1.2rem;display:block}
+.bigbtn .bs{font-family:var(--mono);font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+.bigbtn.q{border-color:var(--dusk)} .bigbtn.q .bt{color:var(--dusk)}
+.bigbtn.n{border-color:var(--rule)} .bigbtn.n .bt{color:var(--ink-2)}
+.bigbtn:active{transform:scale(.97)}
+.strip{display:flex;gap:4px;flex-wrap:wrap;margin:1.1rem 0 .8rem;min-height:26px}
+.chip{font-family:var(--mono);font-size:.58rem;letter-spacing:.09em;padding:.3rem .55rem;border-radius:6px;
+  animation:pop .4s var(--ease)}
+.chip.q{background:var(--dusk-soft);color:var(--dusk)}
+.chip.n{background:var(--surface-3);color:var(--ink-3)}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.8)}to{opacity:1;transform:none}}
+.ratio{height:6px;border-radius:3px;background:var(--surface-3);overflow:hidden;display:flex}
+.ratio i{display:block;height:100%;background:var(--dusk);transition:width .5s var(--ease)}
+.ratio-lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.6rem;
+  letter-spacing:.1em;color:var(--ink-3);margin-top:.5rem}
+
+/* дыхание */
+.breath{display:grid;place-items:center;height:230px;position:relative;margin:.6rem 0}
+.breath .orb{width:78px;height:78px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,var(--dawn-2),var(--dawn));
+  box-shadow:0 0 46px -6px var(--glow);transition:transform 4s linear,box-shadow 1s ease}
+.breath .orb.pause{box-shadow:0 0 70px 6px var(--glow)}
+.breath .halo{position:absolute;width:78px;height:78px;border-radius:50%;border:1px solid var(--dawn);
+  opacity:.32;transition:transform 4s linear}
+.breath .ph{position:absolute;bottom:6px;font-family:var(--mono);font-size:.68rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-3);transition:color .4s}
+.breath .ph.hot{color:var(--dawn)}
+
+/* ушло */
+.gone{position:relative;height:190px;border-radius:14px;background:var(--surface);
+  border:1px solid var(--rule-soft);overflow:hidden;margin:.4rem 0 1rem}
+.gone .dot{position:absolute;width:13px;height:13px;border-radius:50%;background:var(--dusk);
+  opacity:.85;transition:opacity .55s ease,transform .55s var(--ease)}
+.gone .dot.off{opacity:0;transform:scale(.25)}
+.gone .flash{position:absolute;inset:0;background:radial-gradient(circle,var(--dawn-soft),transparent 65%);
+  opacity:0;pointer-events:none;transition:opacity .35s}
+.gone .flash.on{opacity:1}
+.score{display:flex;gap:1.6rem;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;color:var(--ink-3);margin-top:.3rem}
+.score b{color:var(--ink);font-size:1rem}
+
+/* ═════════════════  ЧЕК-ЛИСТ  ═════════════════ */
+.ck-top{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;padding:1.4rem 1.5rem;
+  border-radius:16px;border:1px solid var(--rule);background:var(--surface);box-shadow:var(--shadow);margin-bottom:1.9rem;
+  position:sticky;top:0;z-index:40;backdrop-filter:blur(10px)}
+.ring circle{fill:none;stroke-width:6}
+.ring .bg{stroke:var(--rule)}
+.ring .fg{stroke:var(--dawn);stroke-linecap:round;transition:stroke-dasharray .7s var(--ease)}
+.ck-top .txt .big{font-family:var(--display);font-size:1.55rem;line-height:1.2}
+.ck-top .txt .small{font-size:.89rem;color:var(--ink-2);margin-top:.2rem}
+.ck-top .reset{margin-left:auto}
+.ckgroup{margin-bottom:1.7rem}
+.ckgroup>.gh{display:flex;align-items:baseline;gap:.7rem;padding-bottom:.5rem;
+  border-bottom:1px solid var(--rule);margin-bottom:.35rem}
+.ckgroup>.gh .gn{font-family:var(--mono);font-size:.64rem;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2)}
+.ckgroup>.gh .gc{margin-left:auto;font-family:var(--mono);font-size:.64rem;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.ckitem{display:flex;gap:.85rem;align-items:flex-start;padding:.64rem .6rem;border-radius:10px;
+  cursor:pointer;transition:background .2s,transform .2s var(--ease);user-select:none;position:relative}
+.ckitem:hover{background:var(--surface-2);transform:translateX(3px)}
+.ckitem input{position:absolute;opacity:0;width:0;height:0}
+.box{flex:none;margin-top:.22rem;width:1.18rem;height:1.18rem;border-radius:6px;
+  border:1.5px solid var(--rule);background:var(--surface);display:grid;place-items:center;
+  transition:.28s var(--ease)}
+.box svg{width:.72rem;height:.72rem;opacity:0;transform:scale(.4) rotate(-20deg);
+  transition:.28s var(--ease);stroke:#fff;stroke-width:3.4;fill:none}
+.ckitem input:checked ~ .box{background:var(--dawn);border-color:var(--dawn);transform:scale(1.08)}
+.ckitem input:checked ~ .box svg{opacity:1;transform:none}
+.ckitem input:focus-visible ~ .box{outline:2px solid var(--dusk);outline-offset:2px}
+.ckitem .lbl{font-size:.99rem;line-height:1.5;transition:.28s}
+.ckitem input:checked ~ .lbl{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--rule)}
+
+/* ═════════════════  БИБЛИОТЕКА / ФИНАЛ  ═════════════════ */
+.books{list-style:none;padding:0;margin:1.5rem 0}
+.books li{padding:1rem 0;border-bottom:1px solid var(--rule-soft);display:flex;gap:1rem;align-items:baseline;
+  transition:padding-left .3s var(--ease)}
+.books li:hover{padding-left:.5rem}
+.books li:first-child{border-top:1px solid var(--rule-soft)}
+.books .kind{flex:none;width:6.8rem;font-family:var(--mono);font-size:.58rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);padding-top:.2rem}
+.books .tt{font-weight:600}
+.books .dd{color:var(--ink-2);font-size:.94rem;display:block;margin-top:.12rem}
+.closer{border:1px solid var(--rule);border-radius:20px;padding:clamp(1.5rem,3vw,2.4rem);
+  background:linear-gradient(150deg,var(--dawn-soft),transparent 58%),var(--surface);
+  box-shadow:var(--shadow);position:relative;overflow:hidden}
+.closer::before{content:"";position:absolute;width:260px;height:260px;border-radius:50%;
+  right:-90px;top:-90px;background:var(--dawn);opacity:.09;filter:blur(30px)}
+.closer .kicker{color:var(--dawn);display:block;margin-bottom:.9rem;position:relative}
+.closer h3{margin-top:0;font-size:1.55rem;position:relative}
+.closer p{position:relative}
+footer{border-top:1px solid var(--rule);padding:2.4rem clamp(1.25rem,5vw,4rem) 3.4rem;
+  color:var(--ink-3);font-family:var(--mono);font-size:.66rem;letter-spacing:.09em}
+footer .fi{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;gap:.6rem 2rem;justify-content:space-between}
+.totop{position:fixed;right:1.4rem;bottom:1.4rem;z-index:70;width:2.8rem;height:2.8rem;border-radius:50%;
+  display:grid;place-items:center;border:1px solid var(--rule);background:var(--surface);color:var(--ink-2);
+  cursor:pointer;opacity:0;pointer-events:none;transition:.35s var(--ease);box-shadow:var(--shadow)}
+.totop.on{opacity:1;pointer-events:auto}
+.totop:hover{color:var(--dawn);border-color:var(--dawn);transform:translateY(-3px)}
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<div id="readbar"></div>
+
+<header class="hero">
+  <div class="aurora"><i></i><i></i><i></i></div>
+  <div class="hero-inner">
+    <div class="dawnbar"></div>
+    <span class="kicker mono">Базовая осознанность · методология Шинзена Янга</span>
+    <h1><span>Как</span> <span>делать</span> <span class="em">покой</span></h1>
+    <p class="lede">Покой — не состояние, которое нужно создать. Это то, что уже присутствует в каждом сенсорном канале, просто не замечается. Задача практики — обнаруживать его, направлять туда внимание и напитываться им.</p>
+    <div class="hero-meta">
+      <span>Занятие · <b>2 ч 10 мин</b></span>
+      <span>Протоколов · <b>11</b></span>
+      <span>Тренажёров · <b>5</b></span>
+      <span>Чек-лист · <b>30 пунктов</b></span>
+    </div>
+  </div>
+  <div class="scrollcue">листай<i></i></div>
+</header>
+
+<div class="mobile-toc">
+  <button class="tbtn" id="tocToggle" aria-expanded="false">Оглавление</button>
+  <button class="tbtn" id="themeBtnM">Тема</button>
+  <div class="now" id="nowSec">Идея в одном абзаце</div>
+</div>
+
+<div class="shell">
+  <nav class="rail" id="rail" aria-label="Оглавление">
+    <span class="rail-title mono">Содержание</span>
+    <ul class="toc" id="toc">
+      <li><a href="#idea"><span class="n">01</span>Идея в одном абзаце</a></li>
+      <li><a href="#matrix"><span class="n">02</span>Матрица шести каналов</a></li>
+      <li><a href="#skills"><span class="n">03</span>Три навыка</a></li>
+      <li><a href="#kinds"><span class="n">04</span>Относительный и абсолютный</a></li>
+      <li><a href="#why"><span class="n">05</span>Зачем это вообще</a></li>
+      <li><a href="#protocols"><span class="n">06</span>Протоколы</a></li>
+      <li class="sub"><a href="#p0"><span class="n">00</span>Отмечание · тренажёр</a></li>
+      <li class="sub"><a href="#p1"><span class="n">01</span>Зрение снаружи</a></li>
+      <li class="sub"><a href="#p2"><span class="n">02</span>Зрение внутри</a></li>
+      <li class="sub"><a href="#p3"><span class="n">03</span>Радар тишины</a></li>
+      <li class="sub"><a href="#p4"><span class="n">04</span>Мысль / тихо</a></li>
+      <li class="sub"><a href="#p5"><span class="n">05</span>Телесный покой</a></li>
+      <li class="sub"><a href="#p6"><span class="n">06</span>Мышечная амнезия</a></li>
+      <li class="sub"><a href="#p7"><span class="n">07</span>Эмоциональный покой</a></li>
+      <li class="sub"><a href="#p8"><span class="n">08</span>Сборка каналов</a></li>
+      <li class="sub"><a href="#p9"><span class="n">09</span>Ничего не делать</a></li>
+      <li class="sub"><a href="#p10"><span class="n">10</span>Ушло · тренажёр</a></li>
+      <li><a href="#decouple"><span class="n">07</span>Расцепление каналов</a></li>
+      <li><a href="#pain"><span class="n">08</span>Работа с болью</a></li>
+      <li><a href="#visual"><span class="n">09</span>Про визуализации</a></li>
+      <li><a href="#check"><span class="n">10</span>Чек-лист навыков</a></li>
+      <li><a href="#library"><span class="n">11</span>Что читать дальше</a></li>
+      <li><a href="#minimum"><span class="n">12</span>Рабочий минимум</a></li>
+    </ul>
+    <div class="rail-tools">
+      <button class="tbtn" id="themeBtn">Тема</button>
+      <button class="tbtn" id="jumpCheck">К чек-листу</button>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- 01 -->
+    <section id="idea">
+      <div class="sec-head" data-ghost="01" data-rv>
+        <span class="sec-num mono">01 — Основание</span>
+        <h2>Идея в одном абзаце</h2>
+      </div>
+      <p class="lead" data-rv>Доступ к покою можно иметь всегда, независимо от внешних условий. Практика не производит покой усилием — она развивает чувствительность к тому, что уже есть.</p>
+      <div data-rv>
+        <h3>Два слоя работы</h3>
+        <ul class="plain">
+          <li><strong>Объективные условия</strong> — шторы блэкаут, беруши, маска для сна, влажность, прохлада. Работает, но кончается там, где условия не поменять: самолёт, автобус, кризис.</li>
+          <li><strong>Внутренние навыки</strong> — то, ради чего всё занятие. Работает всегда.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 02 -->
+    <section id="matrix">
+      <div class="sec-head" data-ghost="02" data-rv>
+        <span class="sec-num mono">02 — Карта</span>
+        <h2>Матрица шести каналов</h2>
+      </div>
+      <p data-rv>Весь объём переживаний в любую секунду делится на три модальности и два направления. Каждый канал может быть в активности <em>или в покое</em>. Обычно мы смотрим только на присутствие — и не смотрим на отсутствие.</p>
+      <p class="note mono" data-rv style="text-transform:none;letter-spacing:.05em;font-size:.7rem;color:var(--ink-3)">Нажми на карточку — канал успокоится</p>
+
+      <div class="matrix" id="matrix">
+        <div class="mx active" data-side="out" data-rv="scale" tabindex="0" role="button"
+             data-calm="Темнота за закрытыми веками, расфокусированный взгляд сквозь комнату"
+             data-act="Формы, объекты, свет — взгляд цепляется за конкретное">
+          <span class="state">активность</span><span class="tag">Вижу · снаружи</span>
+          <div class="name">Зрительное поле</div><div class="calm"></div>
+          <div class="sig"><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
+        </div>
+        <div class="mx active" data-side="in" data-rv="scale" tabindex="0" role="button"
+             data-calm="Однотонный экран без картинок и воспоминаний"
+             data-act="Мыслеобразы, воспоминания, сцены будущего">
+          <span class="state">активность</span><span class="tag">Вижу · внутри</span>
+          <div class="name">Мыслеобразы</div><div class="calm"></div>
+          <div class="sig"><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
+        </div>
+        <div class="mx active" data-side="out" data-rv="scale" tabindex="0" role="button"
+             data-calm="Тишина — хотя бы в одном из шести направлений"
+             data-act="Голоса, музыка, шум улицы, гул помещения">
+          <span class="state">активность</span><span class="tag">Слышу · снаружи</span>
+          <div class="name">Внешние звуки</div><div class="calm"></div>
+          <div class="sig"><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
+        </div>
+        <div class="mx active" data-side="in" data-rv="scale" tabindex="0" role="button"
+             data-calm="Тишина ума, паузы между фразами внутреннего голоса"
+             data-act="Внутренний монолог, залипшая песня, комментатор">
+          <span class="state">активность</span><span class="tag">Слышу · внутри</span>
+          <div class="name">Внутренний монолог</div><div class="calm"></div>
+          <div class="sig"><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
+        </div>
+        <div class="mx active" data-side="out" data-rv="scale" tabindex="0" role="button"
+             data-calm="Расслабление, лёгкость, отсутствие напряжений"
+             data-act="Зажимы, вес, боль, беспокойное тело">
+          <span class="state">активность</span><span class="tag">Чувствую · снаружи</span>
+          <div class="name">Ощущения тела</div><div class="calm"></div>
+          <div class="sig"><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
+        </div>
+        <div class="mx active" data-side="in" data-rv="scale" tabindex="0" role="button"
+             data-calm="Отсутствие эмоционального возбуждения"
+             data-act="Тревога, раздражение, возбуждение, азарт">
+          <span class="state">активность</span><span class="tag">Чувствую · внутри</span>
+          <div class="name">Эмоции</div><div class="calm"></div>
+          <div class="sig"><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
+        </div>
+      </div>
+      <p class="note" data-rv>Оранжевая грань — внешнее, синяя — внутреннее.</p>
+    </section>
+
+    <!-- 03 -->
+    <section id="skills">
+      <div class="sec-head" data-ghost="03" data-rv>
+        <span class="sec-num mono">03 — Механика</span>
+        <h2>Три навыка, на которых всё стоит</h2>
+      </div>
+      <div class="skills">
+        <div class="sk" data-rv style="--d:0ms"><span class="k">Навык 1</span><h4>Сосредоточение</h4><p>Направить внимание и удерживать, не давая ему убегать.</p></div>
+        <div class="sk" data-rv style="--d:120ms"><span class="k">Навык 2</span><h4>Сенсорная ясность</h4><p>Различить, что именно происходит в области. Направил внимание на лоб: там напряжение, покой или «не понимаю»?</p></div>
+        <div class="sk" data-rv style="--d:240ms"><span class="k">Навык 3</span><h4>Равностность</h4><p>Открытость любому переживанию — без сопротивления и без захваченности.</p></div>
+      </div>
+
+      <div data-rv>
+        <h3>Переопределение сосредоточения</h3>
+        <p>Контринтуитивный момент, на котором держится вся практика.</p>
+        <div class="pull">Настоящее сосредоточение — не силовое удержание внимания на объекте. Это когда я проливаю равностность на весь фон, и у меня просто нет мотива переключаться.<small>Отвлечение = в фоновом осознавании возник стимул интереснее объекта. Убираем мотив — сосредоточение возникает само</small></div>
+      </div>
+
+      <div data-rv>
+        <h3>Матрёшка формальной практики</h3>
+        <p>Жёсткая последовательность: каждый следующий слой держится на предыдущем.</p>
+      </div>
+      <div class="nest" data-rv>
+        <div class="ring"></div><div class="ring"></div><div class="ring"></div><div class="ring"></div>
+        <span class="lbl" style="top:2px">неподвижная поза</span>
+        <span class="lbl" style="top:26px">тело</span>
+        <span class="lbl" style="top:48px">эмоции</span>
+        <span class="lbl" style="top:70px">ум</span>
+      </div>
+    </section>
+
+    <!-- 04 -->
+    <section id="kinds">
+      <div class="sec-head" data-ghost="04" data-rv>
+        <span class="sec-num mono">04 — Различение</span>
+        <h2>Относительный и абсолютный покой</h2>
+      </div>
+      <div class="duo">
+        <div class="rel" data-rv style="--d:0ms"><div class="h">Относительный</div>
+          <p>Возникает по контрасту: нет звуков — есть покой, нет мыслей — есть покой. Зависит от условий.</p>
+          <p class="note">Дискотека за стеной: «сейчас тихо, кайфую».</p></div>
+        <div class="abs" data-rv style="--d:140ms"><div class="h">Абсолютный</div>
+          <p>Тотальная равностность, тотальное отпускание контроля. Покой при наличии любых раздражителей. Единственное условие — ваш навык.</p>
+          <p class="note">Та же дискотека: «мне вообще всё равно, играет или нет».</p></div>
+      </div>
+      <p data-rv>Протоколы 01–08 работают с относительным покоем. Протоколы 09 и 10 — вход в абсолютный.</p>
+    </section>
+
+    <!-- 05 -->
+    <section id="why">
+      <div class="sec-head" data-ghost="05" data-rv>
+        <span class="sec-num mono">05 — Мотивация</span>
+        <h2>Зачем это вообще</h2>
+      </div>
+      <ol class="reasons">
+        <li data-rv="left" style="--d:0ms"><b>Положительная петля обратной связи</b><span>Покой приятен → фокус на нём легче → покоя больше → ещё легче. Самоусиливающаяся система: проваливаешься всё глубже.</span></li>
+        <li data-rv="left" style="--d:80ms"><b>Контейнер для сложного</b><span>Устойчивый доступ к покою — это фон, из которого рождаются мысли, эмоции, боль. Есть контакт с фоном — взаимодействовать с содержимым сильно проще.</span></li>
+        <li data-rv="left" style="--d:160ms"><b>Лечит дофаминовую гонку</b><span>Привычка бежать вперёд, чтобы не оставаться в «ничего не происходит» — глубинно про страх смерти. Идёшь вдоль полок в супермаркете и ждёшь, что что-то на тебя выпрыгнет; листаешь ленту в поисках «чего-нибудь». Практика примиряет с тем, что ничего не происходит, — а это большая часть жизни.</span></li>
+        <li data-rv="left" style="--d:240ms"><b>Даёт «то самое» медитативное состояние</b><span>Обычный ноутинг в глубокий транс не заводит. Ноутинг покоя — заводит.</span></li>
+        <li data-rv="left" style="--d:320ms"><b>Не отвращает от практики</b><span>Общая осознанность — как включить свет на давно не убиравшемся чердаке: становится видно много хлама. Повышаешь телесную чувствительность и обнаруживаешь, что всё ноет. Покой — приятный вход, с него хорошо начинать.</span></li>
+        <li data-rv="left" style="--d:400ms"><b>Снижение контроля глубинно приятно</b><span>«Не я медитирую, а мной медитируют». В теистических системах — благодать, surrender. Контроль связан с напряжением, отпускание — с расслаблением.</span></li>
+      </ol>
+    </section>
+
+    <!-- 06 -->
+    <section id="protocols">
+      <div class="sec-head" data-ghost="06" data-rv>
+        <span class="sec-num mono">06 — Практика</span>
+        <h2>Протоколы</h2>
+      </div>
+      <p class="lead" data-rv>Одиннадцать техник. Нулевая — общий каркас для всех остальных.</p>
+
+      <!-- P0 -->
+      <article class="proto" id="p0" data-rv>
+        <div class="proto-head"><div class="proto-num">00</div>
+          <div><span class="sub">Каркас всех техник</span><h3>Базовая техника отмечания</h3></div></div>
+        <p class="note">Ноутинг. Всё, что ниже, — вариации этого протокола с разным объектом.</p>
+        <ol class="steps">
+          <li>Направить внимание на выбранное качество покоя.</li>
+          <li>Раз в <strong>5–10 секунд</strong> ставить отметку: «вижу покой» / «слышу покой» / «чувствую покой».</li>
+          <li>Между отметками — просто напитываться этим переживанием.</li>
+          <li>Цепочка отметок делает две вещи: подтверждает, что покой реально есть, и напоминает продолжать.</li>
+        </ol>
+
+        <h4>Три уровня громкости отметки</h4>
+        <ul class="plain">
+          <li><strong>Вслух</strong> — сильнейший, когда сильно сносит.</li>
+          <li><strong>Про себя</strong> — средний.</li>
+          <li><strong>Безмолвно</strong> — отмечаю фактом внимания, ничего не проговаривая. Для стабильного состояния.</li>
+        </ul>
+        <p class="note">Правило переключения: стабильно и насыщенно — снимаем уровень. Начало сносить — добавляем.</p>
+
+        <div class="warn"><b>Главное предостережение.</b> Отметка — не самовнушение. Мы не убеждаем себя, что покой есть. Мы обнаруживаем и подтверждаем то, что реально присутствует. Если покоя в канале нет — не выдумываем, идём в другой канал.</div>
+
+        <div class="lab" id="pacer">
+          <div class="lab-h"><div class="t">Тренажёр отметок</div><div class="st" id="pacerState">остановлен</div></div>
+          <div class="pulsering" id="pulsering">
+            <svg viewBox="0 0 130 130"><circle class="bgc" cx="65" cy="65" r="60"></circle>
+              <circle class="fgc" id="pfg" cx="65" cy="65" r="60" stroke-dasharray="377" stroke-dashoffset="377"></circle></svg>
+            <div class="core"></div>
+          </div>
+          <div class="row">
+            <div class="seg" role="group" aria-label="Интервал">
+              <button data-int="5" aria-pressed="false">5 сек</button>
+              <button data-int="8" aria-pressed="true">8 сек</button>
+              <button data-int="10" aria-pressed="false">10 сек</button>
+            </div>
+            <div class="seg" role="group" aria-label="Длительность">
+              <button data-len="300" aria-pressed="true">5 мин</button>
+              <button data-len="600" aria-pressed="false">10 мин</button>
+              <button data-len="1200" aria-pressed="false">20 мин</button>
+            </div>
+            <button class="go" id="pacerGo" data-on="0">Начать</button>
+            <div class="clock" id="pacerClock">05:00</div>
+          </div>
+          <div class="hint">Мягкий сигнал каждые N секунд — напоминание поставить отметку. Кольцо заполняется между отметками. Запусти, отложи телефон, закрой глаза.</div>
+        </div>
+      </article>
+
+      <!-- P1 -->
+      <article class="proto" id="p1" data-rv>
+        <div class="proto-head"><div class="proto-num">01</div>
+          <div><span class="sub">Вижу · снаружи</span><h3>Визуальный покой снаружи</h3></div></div>
+        <h4>С закрытыми глазами</h4>
+        <ol class="steps"><li>Прикрыть глаза.</li><li>Смотреть на однотонное затемнённое поле за веками.</li><li>Отметка «вижу покой» каждые 5–10 секунд.</li></ol>
+        <h4>С открытыми глазами — сложнее, ценнее</h4>
+        <ol class="steps">
+          <li>Расфокусировать взгляд, смотреть <em>сквозь</em> комнату, не на конкретный объект.</li>
+          <li>Отпустить вовлечённость во внешние формы.</li>
+          <li>Отметка «вижу покой». Каждый раз, когда зрение хочет перефокусироваться на объекте, — снова расфокусировать, отлепиться.</li>
+        </ol>
+        <p class="note">Знакомый естественный опыт: долго сидел за книгой или экраном и зрение поплыло — это оно.</p>
+        <div class="aside i">Нюанс ведущего: медитировать в очках собраннее, чем без. Снятые очки телом читаются как «пора отключаться».</div>
+      </article>
+
+      <!-- P2 -->
+      <article class="proto" id="p2" data-rv>
+        <div class="proto-head"><div class="proto-num">02</div>
+          <div><span class="sub">Вижу · внутри</span><h3>Визуальный покой внутри</h3></div></div>
+        <p>Тот же тёмный экран за веками: когда мыслеобразов нет, видишь просто изнанку век. Практически совпадает с протоколом 01 в варианте с закрытыми глазами — отдельная тренировка нужна только чтобы научиться различать <em>отсутствие картинки</em> как самостоятельное событие.</p>
+      </article>
+
+      <!-- P3 -->
+      <article class="proto" id="p3" data-rv>
+        <div class="proto-head"><div class="proto-num">03</div>
+          <div><span class="sub">Слышу · снаружи</span><h3>Радар тишины</h3></div></div>
+        <p>Ключевая находка занятия: тишина почти всегда есть <strong>в каком-то одном направлении</strong>, даже если вокруг шумно.</p>
+
+        <div class="lab">
+          <div class="lab-h"><div class="t">Сканирование шести направлений</div><div class="st" id="radarState">послушай и отметь</div></div>
+          <div class="radar" id="radar">
+            <div class="plate"></div>
+            <div class="sweep"><i></i></div>
+            <div class="center"><b id="radarCount">0</b>из 6</div>
+            <button data-d="спереди" aria-pressed="false" style="left:50%;top:7%">Спереди</button>
+            <button data-d="справа" aria-pressed="false" style="left:93%;top:50%">Справа</button>
+            <button data-d="сзади" aria-pressed="false" style="left:50%;top:93%">Сзади</button>
+            <button data-d="слева" aria-pressed="false" style="left:7%;top:50%">Слева</button>
+          </div>
+          <div class="vert" id="vert">
+            <span class="vlbl">по вертикали</span>
+            <button data-d="сверху" aria-pressed="false">Сверху</button>
+            <button data-d="снизу" aria-pressed="false">Снизу</button>
+          </div>
+          <div class="hint" id="radarHint">Послушай каждое направление по очереди. Там сейчас звук или тишина? Отметь те, где тихо.</div>
+        </div>
+
+        <ol class="steps">
+          <li>Послушать <strong>слева</strong>. Там сейчас звук или тишина?</li>
+          <li><strong>Справа.</strong></li>
+          <li><strong>Спереди</strong> — как если бы к вам подошёл человек и заговорил.</li>
+          <li><strong>Сзади</strong> — как если бы кто-то хлопнул в ладоши за спиной.</li>
+          <li><strong>Сверху</strong> — соседи топают.</li>
+          <li><strong>Снизу.</strong></li>
+          <li>Найдя направление с тишиной — направить туда внимание и отмечать «слышу покой».</li>
+        </ol>
+        <p class="note">Направление часто нетривиальное — «снизу слева» и подобное. Работает как реальный источник покоя даже на громкой вечеринке.</p>
+        <div class="aside"><strong>Ограничение.</strong> При сильном гуле помещения или тинните внешних источников тишины может не быть вовсе. Это нормально — идём в другой канал.</div>
+        <h4>Обратная связка</h4>
+        <p>Громко в голове, но тихо вокруг — уравновешиваем внутреннюю громкость внешней тишиной. И наоборот: шумная вечеринка, но в голове тихо — это тоже источник.</p>
+      </article>
+
+      <!-- P4 -->
+      <article class="proto" id="p4" data-rv>
+        <div class="proto-head"><div class="proto-num">04</div>
+          <div><span class="sub">Слышу · внутри</span><h3>Мысль / тихо</h3></div></div>
+        <p>Метафора: в центре головы, между ушами, стоит маленькая Bluetooth-колонка. Из неё либо что-то доносится, либо нет.</p>
+        <ol class="steps">
+          <li>Направить внимание в центр головы.</li>
+          <li>Каждые пару секунд ставить одну из двух отметок:
+            <ul><li><strong>«мысль»</strong> — внутренний голос что-то говорит;</li>
+                <li><strong>«тихо»</strong> — голос остановился: на мгновение, на десять секунд, неважно.</li></ul></li>
+          <li>Визуальные образы <strong>игнорировать</strong> — в этой технике только слушаем.</li>
+          <li>Держать две минуты и дольше.</li>
+        </ol>
+
+        <div class="lab tracker">
+          <div class="lab-h"><div class="t">Живая цепочка отметок</div><div class="st" id="trkState">нажимай, что слышишь</div></div>
+          <div class="btns">
+            <button class="bigbtn q" data-t="q"><span class="bt">тихо</span><span class="bs">колонка молчит</span></button>
+            <button class="bigbtn n" data-t="n"><span class="bt">мысль</span><span class="bs">голос говорит</span></button>
+          </div>
+          <div class="strip" id="strip"></div>
+          <div class="ratio"><i id="ratioBar" style="width:0"></i></div>
+          <div class="ratio-lbl"><span id="ratioTxt">тишины — 0%</span><button class="tbtn" id="trkReset" style="padding:.25rem .6rem;font-size:.58rem">сброс</button></div>
+          <div class="hint">Побочный эффект, который и есть цель: когда направляешь луч внимания на процесс мышления, мысли разбегаются и затихают сами.</div>
+        </div>
+
+        <p class="note">Опора: у каждой фразы внутреннего монолога есть запятая и точка. Нон-стоп круглые сутки мысли не идут — паузы есть всегда, вопрос чувствительности.</p>
+        <div class="aside i">Побочка новичка: при попытке слушать «в центре головы» напрягаются глаза. Причина — пространственное восприятие сцеплено с работой глаз, и они пытаются повернуться внутрь черепа. Проходит по мере расцепления каналов.</div>
+      </article>
+
+      <!-- P5 -->
+      <article class="proto" id="p5" data-rv>
+        <div class="proto-head"><div class="proto-num">05</div>
+          <div><span class="sub">Чувствую · снаружи</span><h3>Телесный покой — три источника</h3></div></div>
+
+        <h4>5a · Уже имеющиеся области расслабления</h4>
+        <p>Направить внимание в область. Три варианта ответа: напряжение, покой, непонятно. Искать те, где уже покой: ноги, если сидишь; рука, полностью отпущенная на подлокотник; расслабленное бедро. Отметка «чувствую покой».</p>
+
+        <h4>5b · Дыхание</h4>
+        <ul class="plain">
+          <li>Любой <strong>выдох</strong> — расслабление. Диафрагма, живот, рёбра, грудь возвращаются на место.</li>
+          <li>Любой <strong>вдох</strong> — работа.</li>
+          <li><strong>Пауза после выдоха</strong> — покой, отсутствие движения. Лучший объект.</li>
+        </ul>
+
+        <div class="lab">
+          <div class="lab-h"><div class="t">Проводник дыхания</div><div class="st" id="brState">остановлен</div></div>
+          <div class="breath" id="breath">
+            <div class="halo" id="halo"></div>
+            <div class="orb" id="orb"></div>
+            <div class="ph" id="brPhase">нажми «начать»</div>
+          </div>
+          <div class="row"><button class="go" id="brGo" data-on="0">Начать</button>
+            <div class="clock" id="brCount">0</div></div>
+          <div class="hint">Вдох 4 секунды, выдох 6, затем пауза — на ней шар светится. Пауза и есть объект наблюдения: не я дышу, тело дышит. Никаких задержек, просто жди, когда телу захочется вдохнуть.</div>
+        </div>
+
+        <div class="aside"><strong>Калибровочное упражнение</strong> — разово, не как практика. Сделать чуть более полный вдох, задержать на десять секунд, отпустить. Задержка = напряжение; на контрасте становится очень ясно, что выдох = расслабление.</div>
+
+        <h4>5c · Хронические напряжения</h4>
+        <p>Типовые зоны, которые напрягаются без функциональной нагрузки:</p>
+        <div class="zones">
+          <span>глаза и лоб</span><span>мышцы вокруг глаз</span><span>губы и челюсть</span>
+          <span>плечи вверх</span><span>живот</span><span>низ живота</span><span>ягодицы и промежность</span>
+        </div>
+        <p class="note">Втянутый «для красоты» живот — это самозагон в стрессовую реакцию. Низ живота функционально связан с промежностью: живот напрягается, «хвост» подворачивается.</p>
+        <p><strong>Техника сканирования и расслабления:</strong> сверху вниз, снизу вверх, отпуская напряжение в каждой зоне. Пройдя круг, вернуться к глазам — они, скорее всего, снова напряглись. Это не баг, а тренажёр: каждый повтор даёт ещё одну порцию «а, вот что такое расслабление в челюсти».</p>
+        <div class="pull">Целевое состояние — отслеживать телесный покой в фоне, посреди дел. «Я сейчас говорю и параллельно осознаю, что лоб расслаблен, рука лежит свободно, бедро расслаблено».</div>
+        <h4>Энергетика вопроса, без эзотерики</h4>
+        <p>Сжатый кулак держится только на постоянных затратах. Расслабленная рука — бесплатна. Хроническое напряжение буквально круглосуточно тянет энергию. Отпускать его в течение дня — возвращать себе силы.</p>
+      </article>
+
+      <!-- P6 -->
+      <article class="proto" id="p6" data-rv>
+        <div class="proto-head"><div class="proto-num">06</div>
+          <div><span class="sub">Ремонт чувствительности</span><h3>Мышечная амнезия</h3></div></div>
+        <p>Термин из соматики Ханны — <strong>сенсорно-моторная амнезия</strong>: тело напряглось и забыло, что напряжено. Ход потерян в обе стороны: ни напрячь сознательно, ни расслабить.</p>
+        <h4>Способ 1 · Прикосновение</h4>
+        <ol class="steps">
+          <li>Положить руку на «слепую» зону. Ощущение касания, тепла, мягкости заметишь точно.</li>
+          <li>Продолжая фокусироваться на зоне, <strong>убрать руку на пару сантиметров</strong> и продолжать чувствовать саму зону, а не руку — вторичные ощущения, послевкусие касания.</li>
+          <li>Потерял — снова прикоснулся. Повторять.</li>
+        </ol>
+        <h4>Способ 2 · Прогрессивная релаксация</h4>
+        <p>Вернуть память через усиление.</p>
+        <ol class="steps">
+          <li>Напрячь зону <strong>сильнее</strong>, изо всех сил. Например, зажмуриться и нахмуриться.</li>
+          <li>Отчётливо заметить это напряжение.</li><li>Отпустить.</li>
+          <li>На контрасте заметить расслабление.</li><li>Перейти к следующей зоне.</li>
+        </ol>
+        <h4>Способ 3 · Вернуть подвижность</h4>
+        <p>Медленные микродвижения, вплоть до мысленных. Метод Фельденкрайза — очень медленное, плавное телесное переучивание. Любой массаж и любая физическая практика в целом возвращают чувствительность.</p>
+      </article>
+
+      <!-- P7 -->
+      <article class="proto" id="p7" data-rv>
+        <div class="proto-head"><div class="proto-num">07</div>
+          <div><span class="sub">Чувствую · внутри</span><h3>Эмоциональный покой</h3></div></div>
+        <p>Эмоция — это телесное возбуждение. Значит, эмоциональный покой равен отсутствию этого возбуждения и работает через тот же телесный канал. Отдельной техники не требуется: тот же ноутинг «чувствую покой», направленный внутрь.</p>
+      </article>
+
+      <!-- P8 -->
+      <article class="proto" id="p8" data-rv>
+        <div class="proto-head"><div class="proto-num">08</div>
+          <div><span class="sub">Сборка</span><h3>Вижу, слышу, чувствую покой</h3></div></div>
+        <p>Порядок освоения — рекомендация ведущего, три ступени.</p>
+        <h4>Ступень 1 · Отдельные каналы</h4>
+        <p>Таймер на десять минут, один канал. Например, только расфокусированное зрение с открытыми глазами. Это учит конкретному навыку лучше всего.</p>
+        <h4>Ступень 2 · Эксклюзивный ноутинг</h4>
+        <p>Позволяем вниманию свободно переключаться, но в каждое мгновение отмечаем <strong>что-то одно</strong>. Какой именно канал — неважно, важно, что это покой.</p>
+        <div class="chain"><b>чувствую покой</b><i>·</i><b>слышу покой</b><i>·</i><b>чувствую покой</b><i>·</i><b>вижу покой</b><i>·</i><b>чувствую покой</b></div>
+        <h4>Ступень 3 · Инклюзивный ноутинг</h4>
+        <p>Продвинутая. Разрешены комбинации.</p>
+        <div class="chain"><b>чувствую покой</b><i>·</i><b>чувствую и вижу покой</b><i>·</i><b>чувствую покой</b><i>·</i><b>чувствую и слышу покой</b><i>·</i><b>вижу покой</b></div>
+        <div class="pull">Эффект снежного кома: состояния покоя триггерят друг друга. «О, тихо в мыслях. О, зрение расфокусилось. О, щека расслабилась».</div>
+        <p class="note">Каким каналом заходить — «это не математика». Можно идти через тот, что даётся легче и быстрее даёт доступ, можно добирать слабый. Смотреть по себе.</p>
+      </article>
+
+      <!-- P9 -->
+      <article class="proto" id="p9" data-kind="abs" data-rv>
+        <div class="proto-head"><div class="proto-num">09</div>
+          <div><span class="sub">Абсолютный покой · продвинутая</span><h3>Ничего не делать</h3></div></div>
+        <p>Она же шикантадза («просто сидеть»), она же осознавание без выбора, она же безобъектная медитация.</p>
+        <div class="pull">Позвольте происходить всему тому, что происходит. И если вы замечаете намерение как-то контролировать своё внимание — отпустите это намерение.<small>Полная инструкция. Больше в технике ничего нет</small></div>
+        <h4>Как отличить успех от провала</h4>
+        <p>Внимание будет прыгать, мысли будут крутиться, вас будет уносить — это нормально и не ошибка. Ошибка только одна: если вы <strong>выбираете</strong> этим управлять. Заметил, что управляешь, — отпусти намерение управлять. Происходит само — всё в порядке.</p>
+        <h4>Зачем</h4>
+        <p>Отпустить контролёра, переключиться с «маленького я» на что-то большее. Всё, что вы можете «сделать» в этой практике, будет продиктовано вашими прежними паттернами и шаблонами — поэтому и не делаем.</p>
+        <div class="aside"><strong>Статус.</strong> В большинстве школ дают после стабилизации внимания — счёт дыханий и подобное. Реальный опыт монастыря: «вот твоя подушка, садись» — и через несколько часов мозг вскипает от непонимания, что делать. Это и есть практика. Есть школы, начинающие сразу с неё: Тергар, Мингьюр Ринпоче.</div>
+      </article>
+
+      <!-- P10 -->
+      <article class="proto" id="p10" data-kind="abs" data-rv>
+        <div class="proto-head"><div class="proto-num">10</div>
+          <div><span class="sub">Абсолютный покой · через прекращения</span><h3>Ушло</h3></div></div>
+        <p>По словам Шинзена Янга: если бы на необитаемый остров можно было взять только одну технику — это была бы она.</p>
+        <ol class="steps">
+          <li>Сесть и наблюдать за тем, что происходит, без выбора канала.</li>
+          <li>Каждый раз, когда что-то <strong>полностью пропало или ощутимо частично пропало</strong>, отметить: <strong>«ушло»</strong>.
+            <ul><li>звук был, стала тишина — ушло</li><li>мысль докрутилась и закончилась — ушло</li><li>телесное ощущение сменилось другим — ушло</li></ul></li>
+        </ol>
+        <div class="warn"><b>Главный принцип.</b> Ловим сам момент перехода — от «было» к «перестало быть». Не факт отсутствия постфактум, а точку исчезновения.</div>
+
+        <div class="lab">
+          <div class="lab-h"><div class="t">Тренажёр момента перехода</div><div class="st" id="goneState">не запущен</div></div>
+          <div class="gone" id="goneBox"><div class="flash" id="goneFlash"></div></div>
+          <div class="row">
+            <button class="go" id="goneGo" data-on="0">Начать</button>
+            <button class="go" id="goneHit" style="background:transparent;color:var(--dusk);border-color:var(--dusk);box-shadow:none">Ушло</button>
+          </div>
+          <div class="score"><span>поймано <b id="goneHits">0</b></span><span>мимо <b id="goneMiss">0</b></span><span>реакция <b id="goneMs">—</b></span></div>
+          <div class="hint">Точки гаснут по одной, в случайный момент. Жми «Ушло» ровно тогда, когда заметил исчезновение. Смысл не в скорости — в том, чтобы поймать сам переход, а не констатировать отсутствие постфактум.</div>
+        </div>
+
+        <p><strong>Тест на понимание.</strong> Почти никто не замечает <em>момент</em> прекращения головной боли: люди мучаются, отвлекаются, а потом обнаруживают, что её уже нет. Момент прекращения — качественно другое сенсорное переживание.</p>
+        <h4>Куда это ведёт</h4>
+        <p>Происходит всё по-разному, а заканчивается всё одинаково. Всё возникает из ниоткуда и уходит в никуда, и «на вкус» эти отсутствия одинаковые. Настроив фильтры, обнаруживаешь: всё прекращается прямо сейчас — любой возникший звук в ту же секунду начинает заканчиваться. Это не фигура речи и не фатализм, а реализм: единственное гарантированное — что всё кончается.</p>
+        <h4>Освобождающая половина</h4>
+        <p>Вторая сторона той же медали: точно так же ясно видно, что всё и <strong>начинается</strong>, а осознавание продолжается. Мысль началась, длилась, ушла — а я продолжаю быть. Значит, мысли меня сущностно не определяют. «Мыслю, следовательно существую» не выдерживает проверки: в течение дня куча мгновений, когда я прекрасно существую без всяких мыслей. То же с телесными ощущениями. Отсюда — облегчение, а не страх.</p>
+        <div class="aside i">Пугающим это выглядит на уровне размышлений. В практике — нет.</div>
+      </article>
+    </section>
+
+    <!-- 07 -->
+    <section id="decouple">
+      <div class="sec-head" data-ghost="07" data-rv>
+        <span class="sec-num mono">07 — Побочная линия</span><h2>Расцепление каналов</h2></div>
+      <p data-rv>В обыденном сознании все переживания сцеплены в один клубок — и потому накручивают друг друга как снежный ком. Практика по отдельным каналам расцепляет их: учимся переживать модальности по отдельности и не смешивать.</p>
+      <div data-rv><div class="pull">Распутайся и освободись.<small>Слоган внутренней работы — слышу, вижу, чувствую внутри</small></div></div>
+      <p data-rv>Личность — набор мыслей, идей, убеждений, эмоций. Когда клубок распутывается, всё встаёт на места и течёт безусильно, не впутывая вас. В восточных традициях это и называется освобождением.</p>
+    </section>
+
+    <!-- 08 -->
+    <section id="pain">
+      <div class="sec-head" data-ghost="08" data-rv>
+        <span class="sec-num mono">08 — Применение</span><h2>Работа с болью</h2></div>
+      <p data-rv>Дискомфорт эволюционно захватывает внимание — это оправдано, надо среагировать. Проблема в том, что в жизни полно дискомфортов, с которыми прямо сейчас ничего не сделать, а внимание идёт туда снова и снова.</p>
+      <div class="skills">
+        <div class="sk" data-rv style="--d:0ms"><span class="k">Сосредоточение</span><h4>Увести фокус</h4><p>Способность направить внимание на что-то другое.</p></div>
+        <div class="sk" data-rv style="--d:120ms"><span class="k">Ясность</span><h4>Увидеть остальное</h4><p>Распознать, что помимо боли прямо сейчас есть ещё и покой, и приятность.</p></div>
+        <div class="sk" data-rv style="--d:240ms"><span class="k">Равностность</span><h4>Отцепиться</h4><p>Способность не залипать в переживании боли.</p></div>
+      </div>
+      <p data-rv>Усиление боли при направлении внимания часто вызвано не самой болью, а <strong>сопротивлением</strong>: «не хочу это испытывать». Сопротивление и есть страдание.</p>
+      <div data-rv><div class="pull">Когда боль ничто не сдерживает, она распространяется и слабеет — как газ. Сжатый даёт давление и взрыв, рассеянный проблемы не создаёт.</div></div>
+    </section>
+
+    <!-- 09 -->
+    <section id="visual">
+      <div class="sec-head" data-ghost="09" data-rv>
+        <span class="sec-num mono">09 — Заданный вопрос</span><h2>Про визуализации</h2></div>
+      <p data-rv>Визуализация тёплой воды, приятная музыка и подобное — нормальный вспомогательный инструмент, если помогает расслабиться и уснуть. Но она <strong>не заменяет</strong> обнаружение покоя: почувствовать покой в теле можно только направив туда внимание. Это разные механизмы, и второй нужен всё равно.</p>
+    </section>
+
+    <!-- 10 -->
+    <section id="check">
+      <div class="sec-head" data-ghost="10" data-rv>
+        <span class="sec-num mono">10 — Сверка</span><h2>Чек-лист навыков</h2></div>
+      <p class="lead" data-rv>Прогоняй по пунктам, отмечай честно. Отметки сохраняются в браузере.</p>
+      <div class="ck-top">
+        <svg class="ring" width="74" height="74" viewBox="0 0 74 74" aria-hidden="true">
+          <circle class="bg" cx="37" cy="37" r="31"></circle>
+          <circle class="fg" id="ringFg" cx="37" cy="37" r="31" transform="rotate(-90 37 37)" stroke-dasharray="0 195"></circle>
+        </svg>
+        <div class="txt"><div class="big"><span id="ckDone">0</span> из 30</div>
+          <div class="small" id="ckWord">Ещё ничего не отмечено</div></div>
+        <button class="tbtn reset" id="ckReset">Сбросить</button>
+      </div>
+      <div id="checklist"></div>
+    </section>
+
+    <!-- 11 -->
+    <section id="library">
+      <div class="sec-head" data-ghost="11" data-rv>
+        <span class="sec-num mono">11 — Дальше</span><h2>Что читать</h2></div>
+      <ul class="books">
+        <li data-rv="left" style="--d:0ms"><span class="kind">Методичка</span><div><span class="tt">Шинзен Янг, глава «Путь покоя»</span><span class="dd">Расширенный список эффектов практики покоя. Есть перевод.</span></div></li>
+        <li data-rv="left" style="--d:60ms"><span class="kind">Методичка</span><div><span class="tt">«Лёгкий покой»</span><span class="dd">То же самое другими словами.</span></div></li>
+        <li data-rv="left" style="--d:120ms"><span class="kind">Методичка</span><div><span class="tt">«Ничего не делать»</span><span class="dd">Полный протокол техники 09.</span></div></li>
+        <li data-rv="left" style="--d:180ms"><span class="kind">Методичка</span><div><span class="tt">«Ушло»</span><span class="dd">Полный протокол техники 10. Ведущий рекомендует особо.</span></div></li>
+        <li data-rv="left" style="--d:240ms"><span class="kind">Статья</span><div><span class="tt">Шинзен Янг о шаматхе и випашьяне</span><span class="dd">Лонгрид, свежий перевод: зачем, как тренируется, исторические корни, созерцательные параллели.</span></div></li>
+        <li data-rv="left" style="--d:300ms"><span class="kind">Книга</span><div><span class="tt">Б. Алан Уоллес — «Революция внимания»</span><span class="dd">Тренировка шаматхи.</span></div></li>
+        <li data-rv="left" style="--d:360ms"><span class="kind">Книга</span><div><span class="tt">Чуладаса — «Свет ума»</span><span class="dd">То же, подробно. В русском издании фамилия передана как Куладаса.</span></div></li>
+        <li data-rv="left" style="--d:420ms"><span class="kind">Курс</span><div><span class="tt">Шаматха</span><span class="dd">Легко найти в буддийских организациях, в том числе онлайн.</span></div></li>
+      </ul>
+      <div class="aside" data-rv><strong>Терминологическая сноска.</strong> Випассана (пали, тхеравада — Мьянма, Таиланд, Шри-Ланка, Лаос, Камбоджа) и випашьяна (санскрит: тибетский, китайский, японский буддизм) — при всех нюансах одно и то же: идея освобождающего прозрения.</div>
+    </section>
+
+    <!-- 12 -->
+    <section id="minimum">
+      <div class="sec-head" data-ghost="12" data-rv>
+        <span class="sec-num mono">12 — Вывод</span><h2>Рабочий минимум</h2></div>
+      <div class="closer" data-rv="scale">
+        <span class="kicker mono">Не из видео — предложение по итогам</span>
+        <h3>Одно на ближайший месяц</h3>
+        <p><strong>Протокол 5b — пауза после выдоха</strong>, плюс фоновое отслеживание телесного покоя в течение дня.</p>
+        <p>Причина: не требует отдельного времени, встраивается в любой день, и именно телесный слой — первый этаж матрёшки, без которого остальное не встаёт.</p>
+        <p>Формальную практику начинать с одного канала по таймеру на десять минут. «Ничего не делать» и «Ушло» — не раньше, чем стабилизируется внимание.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer><div class="fi">
+  <span>Конспект занятия «Как делать покой» · базовая осознанность</span>
+  <span>Методология Шинзена Янга</span>
+</div></footer>
+
+<button class="totop" id="totop" aria-label="Наверх">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+(function(){
+'use strict';
+var RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ── тема ── */
+var root=document.documentElement;
+try{var s=localStorage.getItem('pokoy-theme'); if(s) root.setAttribute('data-theme',s);}catch(e){}
+function toggleTheme(){
+  var cur=root.getAttribute('data-theme');
+  if(!cur) cur=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+  var next=cur==='dark'?'light':'dark';
+  root.setAttribute('data-theme',next);
+  try{localStorage.setItem('pokoy-theme',next);}catch(e){}
+}
+['themeBtn','themeBtnM'].forEach(function(id){var b=document.getElementById(id);if(b)b.addEventListener('click',toggleTheme);});
+
+/* ── прогресс + наверх ── */
+var bar=document.getElementById('readbar'), totop=document.getElementById('totop');
+function onScroll(){
+  var h=document.documentElement.scrollHeight-innerHeight;
+  bar.style.width=(h>0?(scrollY/h)*100:0)+'%';
+  totop.classList.toggle('on', scrollY>800);
+}
+addEventListener('scroll',onScroll,{passive:true}); onScroll();
+totop.addEventListener('click',function(){scrollTo({top:0,behavior:'smooth'});});
+
+/* ── появление ── */
+var io=new IntersectionObserver(function(es){
+  es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+},{rootMargin:'0px 0px -8% 0px',threshold:.12});
+document.querySelectorAll('[data-rv]').forEach(function(el){ io.observe(el); });
+
+/* ── скролл-спай ── */
+var links=[].slice.call(document.querySelectorAll('#toc a'));
+var targets=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1));});
+var nowSec=document.getElementById('nowSec'), rail=document.getElementById('rail');
+function spy(){
+  var best=0,y=scrollY+150;
+  for(var i=0;i<targets.length;i++) if(targets[i]&&targets[i].offsetTop<=y) best=i;
+  links.forEach(function(a,i){a.classList.toggle('on',i===best);});
+  if(nowSec) nowSec.textContent=links[best].textContent.replace(/^\d+/,'').trim();
+  if(innerWidth>=1040){
+    var el=links[best],top=el.offsetTop,rt=rail.scrollTop;
+    if(top<rt+40||top>rt+rail.clientHeight-60) rail.scrollTop=top-rail.clientHeight/2;
+  }
+}
+addEventListener('scroll',spy,{passive:true}); spy();
+
+/* ── мобильное меню ── */
+var tt=document.getElementById('tocToggle');
+if(tt){
+  tt.addEventListener('click',function(){
+    var open=rail.classList.toggle('open');
+    tt.setAttribute('aria-expanded',open?'true':'false');
+    tt.textContent=open?'Закрыть':'Оглавление';
+  });
+  rail.addEventListener('click',function(e){
+    if(e.target.closest('a')&&innerWidth<1040){rail.classList.remove('open');tt.textContent='Оглавление';}
+  });
+}
+document.getElementById('jumpCheck').addEventListener('click',function(){
+  document.getElementById('check').scrollIntoView({behavior:'smooth'});
+});
+
+/* ── общий звук ── */
+var ctx=null;
+function tone(freq,dur,vol){
+  try{
+    if(!ctx) ctx=new (window.AudioContext||window.webkitAudioContext)();
+    if(ctx.state==='suspended') ctx.resume();
+    var o=ctx.createOscillator(),g=ctx.createGain(),t=ctx.currentTime;
+    o.type='sine'; o.frequency.setValueAtTime(freq,t);
+    g.gain.setValueAtTime(0,t);
+    g.gain.linearRampToValueAtTime(vol||.08,t+.02);
+    g.gain.exponentialRampToValueAtTime(.0001,t+(dur||1.1));
+    o.connect(g);g.connect(ctx.destination);o.start(t);o.stop(t+(dur||1.1)+.1);
+  }catch(e){}
+}
+
+/* ── матрица каналов ── */
+var matrix=document.getElementById('matrix');
+function paintMx(c){
+  var on=c.classList.contains('active');
+  c.querySelector('.calm').textContent = on ? c.dataset.act : c.dataset.calm;
+  c.querySelector('.state').textContent = on ? 'активность' : 'покой';
+}
+[].forEach.call(matrix.querySelectorAll('.mx'),paintMx);
+function flip(c){ c.classList.toggle('active'); paintMx(c); if(!c.classList.contains('active')) tone(560,.7,.045); }
+matrix.addEventListener('click',function(e){var c=e.target.closest('.mx'); if(c) flip(c);});
+matrix.addEventListener('keydown',function(e){
+  if(e.key!=='Enter'&&e.key!==' ')return; var c=e.target.closest('.mx'); if(c){e.preventDefault();flip(c);}
+});
+
+/* ── тренажёр отметок ── */
+(function(){
+  var go=document.getElementById('pacerGo'),clock=document.getElementById('pacerClock'),
+      st=document.getElementById('pacerState'),ring=document.getElementById('pulsering'),
+      fg=document.getElementById('pfg'),pacer=document.getElementById('pacer');
+  var C=377,interval=8,total=300,left=300,el=0,tick=null,run=false;
+  function fmt(s){var m=Math.floor(s/60),ss=s%60;return (m<10?'0':'')+m+':'+(ss<10?'0':'')+ss;}
+  pacer.addEventListener('click',function(e){
+    var b=e.target.closest('button[data-int],button[data-len]'); if(!b||run) return;
+    if(b.dataset.int){interval=+b.dataset.int;
+      [].forEach.call(pacer.querySelectorAll('[data-int]'),function(x){x.setAttribute('aria-pressed',String(+x.dataset.int===interval));});}
+    if(b.dataset.len){total=+b.dataset.len;left=total;clock.textContent=fmt(left);
+      [].forEach.call(pacer.querySelectorAll('[data-len]'),function(x){x.setAttribute('aria-pressed',String(+x.dataset.len===total));});}
+  });
+  function ping(){ tone(528,1.15,.085); ring.classList.remove('ping'); void ring.offsetWidth; ring.classList.add('ping'); }
+  function stop(msg){ run=false;clearInterval(tick);tick=null;go.textContent='Начать';go.dataset.on='0';
+    st.textContent=msg||'остановлен';left=total;el=0;clock.textContent=fmt(left);fg.style.strokeDashoffset=C; }
+  function start(){
+    run=true;go.textContent='Стоп';go.dataset.on='1';st.textContent='идёт · отметка каждые '+interval+' сек';
+    el=0;ping();
+    tick=setInterval(function(){
+      left--;el++;clock.textContent=fmt(left);
+      if(el>=interval){el=0;ping();}
+      fg.style.strokeDashoffset=C-(C*(el/interval));
+      if(left<=0){ping();setTimeout(function(){tone(396,1.6,.07);},450);stop('сессия завершена');}
+    },1000);
+  }
+  go.addEventListener('click',function(){run?stop():start();});
+  clock.textContent=fmt(left);fg.style.strokeDashoffset=C;
+})();
+
+/* ── радар тишины ── */
+(function(){
+  var r=document.getElementById('radar'),cnt=document.getElementById('radarCount'),
+      st=document.getElementById('radarState'),hint=document.getElementById('radarHint'),
+      v=document.getElementById('vert');
+  if(!r) return;
+  function all(){return [].slice.call(r.querySelectorAll('[aria-pressed]')).concat([].slice.call(v.querySelectorAll('[aria-pressed]')));}
+  function onClick(e){
+    var b=e.target.closest('button'); if(!b) return;
+    var on=b.getAttribute('aria-pressed')==='true';
+    b.setAttribute('aria-pressed',on?'false':'true');
+    if(!on) tone(660,.6,.05);
+    var found=all().filter(function(x){return x.getAttribute('aria-pressed')==='true';}).map(function(x){return x.dataset.d;});
+    cnt.textContent=found.length;
+    st.textContent = found.length?found.length+' направлений тихо':'послушай и отметь';
+    hint.textContent = found.length
+      ? 'Тишина найдена: '+found.join(', ')+'. Направь внимание туда и отмечай «слышу покой».'
+      : 'Послушай каждое направление по очереди. Там сейчас звук или тишина? Отметь те, где тихо.';
+  }
+  r.addEventListener('click',onClick); v.addEventListener('click',onClick);
+})();
+
+/* ── трекер мысль/тихо ── */
+(function(){
+  var strip=document.getElementById('strip'),barEl=document.getElementById('ratioBar'),
+      txt=document.getElementById('ratioTxt'),st=document.getElementById('trkState'),
+      wrap=document.querySelector('.tracker');
+  if(!wrap) return;
+  var q=0,n=0;
+  function upd(){
+    var tot=q+n,p=tot?Math.round(q/tot*100):0;
+    barEl.style.width=p+'%';
+    txt.textContent='тишины — '+p+'%  ·  отметок '+tot;
+    st.textContent = tot===0?'нажимай, что слышишь' : p>=60?'ум затихает' : p>=30?'идёт работа':'много активности';
+  }
+  wrap.addEventListener('click',function(e){
+    var b=e.target.closest('.bigbtn');
+    if(b){
+      var t=b.dataset.t;
+      if(t==='q'){q++;tone(700,.45,.05);} else {n++;tone(300,.28,.035);}
+      var c=document.createElement('span');
+      c.className='chip '+t; c.textContent=t==='q'?'тихо':'мысль';
+      strip.appendChild(c);
+      if(strip.children.length>40) strip.removeChild(strip.firstChild);
+      upd(); return;
+    }
+    if(e.target.id==='trkReset'){q=0;n=0;strip.innerHTML='';upd();}
+  });
+  upd();
+})();
+
+/* ── проводник дыхания ── */
+(function(){
+  var go=document.getElementById('brGo'),orb=document.getElementById('orb'),halo=document.getElementById('halo'),
+      ph=document.getElementById('brPhase'),st=document.getElementById('brState'),cnt=document.getElementById('brCount');
+  if(!go) return;
+  var run=false,timer=null,cycles=0;
+  var PH=[{n:'вдох',d:4000,s:2.35,hot:false},{n:'выдох',d:6000,s:1,hot:false},{n:'пауза · покой',d:3200,s:1,hot:true}];
+  var i=0;
+  function step(){
+    var p=PH[i];
+    orb.style.transitionDuration=(p.d/1000)+'s';
+    halo.style.transitionDuration=(p.d/1000)+'s';
+    orb.style.transform='scale('+p.s+')';
+    halo.style.transform='scale('+(p.s*1.35)+')';
+    ph.textContent=p.n; ph.classList.toggle('hot',p.hot);
+    orb.classList.toggle('pause',p.hot);
+    if(p.hot) tone(432,1.4,.05);
+    timer=setTimeout(function(){
+      i=(i+1)%PH.length;
+      if(i===0){cycles++;cnt.textContent=cycles;}
+      if(run) step();
+    },p.d);
+  }
+  function stop(){run=false;clearTimeout(timer);go.textContent='Начать';go.dataset.on='0';
+    st.textContent='остановлен';ph.textContent='нажми «начать»';ph.classList.remove('hot');
+    orb.classList.remove('pause');
+    orb.style.transitionDuration='.6s';halo.style.transitionDuration='.6s';
+    orb.style.transform='scale(1)';halo.style.transform='scale(1)';}
+  go.addEventListener('click',function(){
+    if(run){stop();return;}
+    run=true;i=0;cycles=0;cnt.textContent=0;go.textContent='Стоп';go.dataset.on='1';
+    st.textContent='вдох 4 · выдох 6 · пауза';step();
+  });
+})();
+
+/* ── тренажёр «ушло» ── */
+(function(){
+  var box=document.getElementById('goneBox'),go=document.getElementById('goneGo'),
+      hit=document.getElementById('goneHit'),st=document.getElementById('goneState'),
+      hitsEl=document.getElementById('goneHits'),missEl=document.getElementById('goneMiss'),
+      msEl=document.getElementById('goneMs'),flash=document.getElementById('goneFlash');
+  if(!box) return;
+  var dots=[],run=false,timer=null,lastVanish=0,hits=0,miss=0,sum=0,seeded=false;
+  function place(d){
+    d.style.left=(8+Math.random()*84)+'%';
+    d.style.top=(12+Math.random()*72)+'%';
+  }
+  function build(){
+    dots.forEach(function(d){d.remove();}); dots=[];
+    for(var i=0;i<7;i++){
+      var d=document.createElement('span'); d.className='dot'; place(d);
+      box.appendChild(d); dots.push(d);
+    }
+  }
+  function loop(){
+    if(!run) return;
+    var live=dots.filter(function(d){return !d.classList.contains('off');});
+    if(live.length){
+      var d=live[Math.floor(Math.random()*live.length)];
+      d.classList.add('off'); lastVanish=performance.now(); tone(340,.5,.03);
+      setTimeout(function(){ if(run){ place(d); d.classList.remove('off'); } },1400+Math.random()*1600);
+    }
+    timer=setTimeout(loop,900+Math.random()*2200);
+  }
+  build();
+  go.addEventListener('click',function(){
+    if(run){ run=false;clearTimeout(timer);go.textContent='Начать';go.dataset.on='0';st.textContent='не запущен'; return; }
+    run=true;hits=0;miss=0;sum=0;hitsEl.textContent=0;missEl.textContent=0;msEl.textContent='—';
+    build();go.textContent='Стоп';go.dataset.on='1';st.textContent='лови момент исчезновения';
+    lastVanish=0; loop();
+  });
+  hit.addEventListener('click',function(){
+    if(!run){st.textContent='сначала запусти';return;}
+    var dt=lastVanish?performance.now()-lastVanish:99999;
+    flash.classList.add('on'); setTimeout(function(){flash.classList.remove('on');},220);
+    if(dt<1500){ hits++;sum+=dt;hitsEl.textContent=hits;msEl.textContent=Math.round(sum/hits)+' мс';
+      tone(760,.5,.06); lastVanish=0; }
+    else { miss++;missEl.textContent=miss;tone(220,.3,.03); }
+  });
+})();
+
+/* ── чек-лист ── */
+var GROUPS=[
+  {n:'Матрица и различения',items:[
+    'Могу с ходу назвать шесть каналов и сказать, что в каждом сейчас — активность или покой',
+    'Различаю относительный и абсолютный покой в своём опыте, а не только на словах',
+    'Понимаю сосредоточение как «нет мотива переключаться», а не как силовое удержание']},
+  {n:'Зрение',items:[
+    'Держу внимание на тёмном поле за закрытыми веками, отмечая «вижу покой»',
+    'Умею расфокусировать взгляд с открытыми глазами и удерживать зрительный покой',
+    'Замечаю отсутствие мыслеобразов как отдельное событие']},
+  {n:'Слух',items:[
+    'Сканирую шесть направлений и нахожу, где тишина',
+    'Могу опереться на тишину в одном направлении, когда вокруг шумно',
+    'Слышу внутренний монолог как звуковой канал, а не как «себя»',
+    'Держу цепочку «мысль / тихо» две минуты и вижу, как мысли затихают от направленного внимания']},
+  {n:'Тело',items:[
+    'Нахожу уже расслабленные области — ноги, лежащая рука — и отмечаю их как покой',
+    'Опираюсь на выдох как на расслабление',
+    'Наблюдаю паузу после выдоха, не форсируя дыхание: «тело дышит, я наблюдаю»',
+    'Знаю свои личные хронические зоны из списка',
+    'Прохожу скан сверху вниз и обратно, отпуская напряжения',
+    'Отслеживаю телесный покой в фоне посреди работы, а не только в формальной практике',
+    'Использую прогрессивную релаксацию — напрячь, отпустить — для «слепых» зон',
+    'Использую прикосновение с отведением руки для возврата чувствительности']},
+  {n:'Ноутинг',items:[
+    'Держу цепочку отметок раз в 5–10 секунд, не сваливаясь в самовнушение',
+    'Осознанно переключаю громкость отметки: вслух, про себя, безмолвно',
+    'Отработал каждый канал отдельно по десять минут с таймером',
+    'Делаю эксклюзивный ноутинг «вижу, слышу, чувствую покой»',
+    'Делаю инклюзивный ноутинг с комбинациями каналов',
+    'Ловил эффект снежного кома, когда одни покои начинают триггерить другие']},
+  {n:'Абсолютный покой',items:[
+    'Практикую «ничего не делать» и отличаю «уносит само» от «я управляю»',
+    'Практикую «ушло», ловя именно момент перехода, а не факт отсутствия',
+    'Замечал, что покой одного канала подтягивает покой другого без усилия']},
+  {n:'Прикладное',items:[
+    'Имею доступ к покою в неудобных условиях: самолёт, очередь, шум за стеной',
+    'Работаю с болью через переключение фокуса, а не через сопротивление',
+    'Замечаю у себя дофаминовое «пусть что-нибудь произойдёт» и умею в это не идти']}
+];
+var host=document.getElementById('checklist'),store={};
+try{store=JSON.parse(localStorage.getItem('pokoy-check')||'{}');}catch(e){store={};}
+var TOTAL=0,idx=0,html='';
+GROUPS.forEach(function(g,gi){
+  html+='<div class="ckgroup"><div class="gh"><span class="gn">'+g.n+'</span><span class="gc" data-gc="'+gi+'"></span></div>';
+  g.items.forEach(function(t){
+    var id='c'+(idx++);TOTAL++;
+    html+='<label class="ckitem"><input type="checkbox" data-id="'+id+'" data-g="'+gi+'"'+(store[id]?' checked':'')+'>'
+      +'<span class="box"><svg viewBox="0 0 24 24"><path d="M4 12.6l5.2 5.2L20 7"/></svg></span>'
+      +'<span class="lbl">'+t+'</span></label>';
+  });
+  html+='</div>';
+});
+host.innerHTML=html;
+var ringFg=document.getElementById('ringFg'),C2=2*Math.PI*31,
+    ckDone=document.getElementById('ckDone'),ckWord=document.getElementById('ckWord');
+function refresh(){
+  var boxes=[].slice.call(host.querySelectorAll('input')),
+      done=boxes.filter(function(b){return b.checked;}).length,pct=TOTAL?done/TOTAL:0;
+  ckDone.textContent=done;
+  ringFg.setAttribute('stroke-dasharray',(C2*pct).toFixed(1)+' '+C2.toFixed(1));
+  ckWord.textContent= done===0?'Ещё ничего не отмечено'
+    : done===TOTAL?'Пройдено всё — дальше вглубь, а не вширь'
+    : pct<.34?'Начало. Добирай базовые каналы'
+    : pct<.67?'Половина пути. Смотри, какой канал провисает'
+    : 'Основное закрыто. Дожимай абсолютный покой';
+  GROUPS.forEach(function(g,gi){
+    var gb=boxes.filter(function(b){return +b.dataset.g===gi;}),
+        gd=gb.filter(function(b){return b.checked;}).length,
+        el=host.querySelector('[data-gc="'+gi+'"]');
+    if(el) el.textContent=gd+'/'+gb.length;
+  });
+}
+host.addEventListener('change',function(e){
+  var b=e.target; if(b.type!=='checkbox') return;
+  store[b.dataset.id]=b.checked;
+  if(b.checked) tone(880,.35,.045);
+  try{localStorage.setItem('pokoy-check',JSON.stringify(store));}catch(e){}
+  refresh();
+});
+document.getElementById('ckReset').addEventListener('click',function(){
+  [].forEach.call(host.querySelectorAll('input'),function(b){b.checked=false;});
+  store={}; try{localStorage.removeItem('pokoy-check');}catch(e){}
+  refresh();
+});
+refresh();
+})();
+</script>
+</body>
+</html>
